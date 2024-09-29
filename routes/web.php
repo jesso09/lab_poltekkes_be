@@ -23,3 +23,14 @@ Route::get('/symlink', function () {
     symlink($target, $link);
     echo "Done";
  });
+
+ Route::get('/unlink-symlink', function () {
+    $link = $_SERVER['DOCUMENT_ROOT'].'/public/storage';
+    
+    if (file_exists($link)) {
+        unlink($link);
+        echo "Symbolic link deleted";
+    } else {
+        echo "Symbolic link not found";
+    }
+});
