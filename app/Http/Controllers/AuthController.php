@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'message' => "Only Admin Can Access"
             ], 401);
         } else {
-            $user = User::find($nipOrUsername);
+            $user = User::where('username_or_nip', $nipOrUsername);
             return response()->json([
                 'message' => 'Data User',
                 'data' => $user,
