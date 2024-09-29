@@ -63,6 +63,7 @@ Route::group(['prefix' => 'alat', 'middleware' => ['auth:sanctum']], function ()
 Route::group(['prefix' => 'peminjaman', 'middleware' => ['auth:sanctum']], function () {
     Route::get('index', [PeminjamanController::class, 'index']);
     Route::get('user', [PeminjamanController::class, 'indexByUser']);
+    Route::get('detail', [PeminjamanController::class, 'indexDetail']);
     Route::get('history', [PeminjamanController::class, 'historyByUser']);
     Route::post('add', [PeminjamanController::class, 'store']);
 });

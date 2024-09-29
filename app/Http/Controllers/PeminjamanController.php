@@ -49,6 +49,21 @@ class PeminjamanController extends Controller
             'data' => $peminjamanData
         ], 200);
     }
+
+    public function indexDetail()
+    {
+        $peminjamanData = PeminjamanDetail::latest()->get();
+        if (is_null($peminjamanData)) {
+            return response([
+                'message' => 'Data not found',
+                'data' => $peminjamanData
+            ], 404);
+        }
+        return response([
+            'message' => 'Data Peminjaman',
+            'data' => $peminjamanData
+        ], 200);
+    }
     
     public function historyByUser()
     {
