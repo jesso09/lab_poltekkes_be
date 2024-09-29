@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,27 @@ Route::get('/symlink', function () {
     } else {
         echo "Symbolic link not found";
     }
+});
+
+Route::get('/set-permissions', function () {
+    $storagePath = $_SERVER['DOCUMENT_ROOT'].'/storage';
+    $publicStoragePath = $_SERVER['DOCUMENT_ROOT'].'/public/storage';
+    
+    // Set permission to 775 for the storage directory
+    if (File::exists($storagePath)) {
+        chmod($storagePath, 0775);
+        echo "Permissions for storage directory set to 775<br>";
+    } else {
+        echo "Storage directory not found<br>";
+    }
+
+    // Set permission to 775 for the public/storage directory
+    if (File::exists($publicStoragePath)) {
+        chmod($publicStoragePath, 0775);
+        echo "Permissions for public/storage directory set to 775<br>";
+    } else {
+        echo "Public storage directory not found<br>";
+    }
+
+    return "Permissions updated.";
 });
