@@ -30,6 +30,26 @@ class AuthController extends Controller
         }
 
     }
+    
+    public function changeStatusUser(Request $request, $nipOrUsername)
+    {
+        $admin = Auth::user();
+
+        if ($admin->role != 'admin') {
+            return response([
+                'status' => 401,
+                'message' => "Only Admin Can Access"
+            ], 401);
+        } else {
+            $user = User::find($nipOrUsername);
+            return response()->json([
+                'message' => 'Data User',
+                'data' => $user,
+                'req' => $request->new_status,
+            ], 200);
+        }
+
+    }
 
     public function login(Request $request)
     {
