@@ -18,5 +18,8 @@ Route::get('/', function () {
 });
 
 Route::get('/symlink', function () {
-    Artisan::call('storage:link');
-});
+    $target =$_SERVER['DOCUMENT_ROOT'].'/storage/app/public';
+    $link = $_SERVER['DOCUMENT_ROOT'].'/public/storage';
+    symlink($target, $link);
+    echo "Done";
+ });
