@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,25 +36,22 @@ Route::get('/symlink', function () {
     }
 });
 
-Route::get('/set-permissions', function () {
-    $storagePath = $_SERVER['DOCUMENT_ROOT'].'/storage';
-    $publicStoragePath = $_SERVER['DOCUMENT_ROOT'].'/public/storage';
-    
-    // Set permission to 775 for the storage directory
-    if (File::exists($storagePath)) {
-        chmod($storagePath, 0775);
-        echo "Permissions for storage directory set to 775<br>";
-    } else {
-        echo "Storage directory not found<br>";
-    }
+Route::get('/clear-all', function () {
+    // Clear the configuration cache
+    Artisan::call('config:cache');
+    echo "Configuration cache cleared.<br>";
 
-    // Set permission to 775 for the public/storage directory
-    if (File::exists($publicStoragePath)) {
-        chmod($publicStoragePath, 0775);
-        echo "Permissions for public/storage directory set to 775<br>";
-    } else {
-        echo "Public storage directory not found<br>";
-    }
+    // Clear the route cache
+    Artisan::call('route:clear');
+    echo "Route cache cleared.<br>";
 
-    return "Permissions updated.";
+    // Clear the view cache
+    Artisan::call('view:clear');
+    echo "View cache cleared.<br>";
+
+    // Clear the application cache
+    Artisan::call('cache:clear');
+    echo "Application cache cleared.<br>";
+
+    return "All caches cleared!";
 });
