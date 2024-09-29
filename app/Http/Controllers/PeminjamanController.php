@@ -49,6 +49,29 @@ class PeminjamanController extends Controller
             'data' => $peminjamanData
         ], 200);
     }
+    
+    public function historyByUser()
+    {
+        $idUser = Auth::user()->id;
+
+        if (!$idUser) {
+            return response([
+                'message' => 'User Not Found',
+            ], 404);
+        }
+
+        $peminjamanData = PeminjamanDetail::where('id_peminjam', $idUser)->latest()->get();
+        if (is_null($peminjamanData)) {
+            return response([
+                'message' => 'Data not found',
+                'data' => $peminjamanData
+            ], 404);
+        }
+        return response([
+            'message' => 'Data Peminjaman',
+            'data' => $peminjamanData
+        ], 200);
+    }
 
     /**
      * store
