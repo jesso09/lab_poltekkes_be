@@ -48,10 +48,12 @@ class AuthController extends Controller
                     'data' => $user,
                 ], 404);
             } else {
+                $user->status = $request->new_status;
+
                 return response()->json([
                     'message' => 'Data User',
                     'data' => $user,
-                    'req' => $request->new_status,
+                    'req' => $user->status,
                 ], 200);
             }
 
