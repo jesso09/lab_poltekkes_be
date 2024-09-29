@@ -70,7 +70,7 @@ class LabController extends Controller
             $generated_name = 'lab' . '-' . time() . '.' . $request->foto_lab->extension();
 
             // menyimpan gambar
-            $request->foto_lab->storeAs('public/lab', $generated_name);
+            $request->foto_lab->storeAs('public/assets', $generated_name);
         } else {
             $generated_name = null;
         }
@@ -132,19 +132,19 @@ class LabController extends Controller
                 $generated_name = 'lab' . '-' . time() . '.' . $request->foto_lab->extension();
 
                 // menyimpan gambar
-                $request->foto_lab->storeAs('public/lab', $generated_name);
+                $request->foto_lab->storeAs('public/assets', $generated_name);
                 $data->foto_lab = $generated_name;
 
 
             } else if ($data->foto_lab != null) {
 
                 // unlink(public_path('storage/public/lab/' . $data->foto_lab));
-                unlink(public_path('storage/lab/' . $data->foto_lab));
+                unlink(public_path('storage/assets/' . $data->foto_lab));
 
                 $original_name = $request->foto_lab->getClientOriginalName();
                 $generated_name = 'lab' . '-' . time() . '.' . $request->foto_lab->extension();
                 // menyimpan gambar
-                $request->foto_lab->storeAs('public/lab', $generated_name);
+                $request->foto_lab->storeAs('public/assets', $generated_name);
                 $data->foto_lab = $generated_name;
             }
         }

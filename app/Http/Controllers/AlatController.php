@@ -71,7 +71,7 @@ class AlatController extends Controller
             $generated_name = 'alat' . '-' . time() . '.' . $request->foto_alat->extension();
 
             // menyimpan gambar
-            $request->foto_alat->storeAs('public/alat', $generated_name);
+            $request->foto_alat->storeAs('public/assets', $generated_name);
         } else {
             $generated_name = null;
         }
@@ -135,19 +135,19 @@ class AlatController extends Controller
                 $generated_name = 'alat' . '-' . time() . '.' . $request->foto_alat->extension();
 
                 // menyimpan gambar
-                $request->foto_alat->storeAs('public/alat', $generated_name);
+                $request->foto_alat->storeAs('public/assets', $generated_name);
                 $data->foto_alat = $generated_name;
 
 
             } else if ($data->foto_alat != null) {
 
                 // unlink(public_path('storage/public/alat/' . $data->foto_alat));
-                unlink(public_path('storage/alat/' . $data->foto_alat));
+                unlink(public_path('storage/assets/' . $data->foto_alat));
 
                 $original_name = $request->foto_alat->getClientOriginalName();
                 $generated_name = 'alat' . '-' . time() . '.' . $request->foto_alat->extension();
                 // menyimpan gambar
-                $request->foto_alat->storeAs('public/alat', $generated_name);
+                $request->foto_alat->storeAs('public/assets', $generated_name);
                 $data->foto_alat = $generated_name;
             }
         }
