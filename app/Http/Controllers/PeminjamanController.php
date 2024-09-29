@@ -83,7 +83,7 @@ class PeminjamanController extends Controller
             'confirm_time' => $request->confirm_time,
             'return_time' => $request->return_time,
             'keterangan' => $request->keterangan,
-            'status' => "Belum Diverifikasi",
+            'status' => "Belum Dikonfirmasi",
         ]);
 
         $lab = Lab::find($request->id_lab);
@@ -99,7 +99,7 @@ class PeminjamanController extends Controller
             'confirm_time' => $request->confirm_time,
             'return_time' => $request->return_time,
             'keterangan' => $request->keterangan,
-            'status' => "Belum Diverifikasi",
+            'status' => "Belum Dikonfirmasi",
         ];
 
         $newDetailPeminjaman = PeminjamanDetail::create($detailPeminjaman);
