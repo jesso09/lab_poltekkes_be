@@ -105,9 +105,10 @@ class PeminjamanController extends Controller
          return response([
              'message' => 'Data added successfully',
              'data' => $newData,
-             'lab data' => $lab,
-             'alat data' => $alat,
-             'user data' => $peminjam,
+             'lab data' => $lab->nama_lab,
+             'alat data' => $alat->nama_alat,
+             'user data' => $peminjam->nama,
+             'user data 2' => $peminjam->role,
          ], status: 201);
      }
 }
