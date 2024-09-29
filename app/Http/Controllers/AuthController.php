@@ -30,7 +30,7 @@ class AuthController extends Controller
         }
 
     }
-    
+
     public function changeStatusUser(Request $request, $nipOrUsername)
     {
         $admin = Auth::user();
@@ -42,11 +42,19 @@ class AuthController extends Controller
             ], 401);
         } else {
             $user = User::where('username_or_nip', $nipOrUsername)->first();
-            return response()->json([
-                'message' => 'Data User',
-                'data' => $user,
-                'req' => $request->new_status,
-            ], 200);
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User Not Found',
+                    'data' => $user,
+                ], 404);
+            } else {
+                return response()->json([
+                    'message' => 'Data User',
+                    'data' => $user,
+                    'req' => $request->new_status,
+                ], 200);
+            }
+
         }
 
     }
