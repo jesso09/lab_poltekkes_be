@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\AlatLab;
 use App\Models\Lab;
 use App\Models\PeminjamanAlat;
+use App\Models\PeminjamanDetail;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -55,60 +56,62 @@ class PeminjamanController extends Controller
      * @param Request $request
      */
 
-     public function store(Request $request)
-     {
-         $newData = $request->all();
-         //Validasi Formulir
-         $validator = Validator::make($newData, [
-             'id_lab' => 'required',
-             'id_alat' => 'required',
-             'id_peminjam' => 'required',
-             'jumlah_alat' => 'required',
+    public function store(Request $request)
+    {
+        $newData = $request->all();
+        //Validasi Formulir
+        $validator = Validator::make($newData, [
+            'id_lab' => 'required',
+            'id_alat' => 'required',
+            'id_peminjam' => 'required',
+            'jumlah_alat' => 'required',
             //  'confirm_time' => 'required',
             //  'return_time' => 'required',
-             'keterangan' => 'required',
+            'keterangan' => 'required',
             //  'status' => 'required',
-         ], [
-         ]);
-         if ($validator->fails()) {
-             return response(['message' => $validator->errors()], 400);
-         }
- 
-        //  $newData = PeminjamanAlat::create([
-        //      'id_lab' => $request->id_lab,
-        //      'id_alat' => $request->id_alat,
-        //      'id_peminjam' => $request->id_peminjam,
-        //      'jumlah_alat' => $request->jumlah_alat,
-        //      'confirm_time' => $request->confirm_time,
-        //      'return_time' => $request->return_time,
-        //      'keterangan' => $request->keterangan,
-        //      'status' => "Belum Diverifikasi",
-        //  ]);
+        ], [
+        ]);
+        if ($validator->fails()) {
+            return response(['message' => $validator->errors()], 400);
+        }
 
-         $lab = Lab::find($request->id_lab);
-         $alat = AlatLab::find($request->id_alat);
-         $peminjam = User::find($request->id_peminjam);
+        $newData = PeminjamanAlat::create([
+            'id_lab' => $request->id_lab,
+            'id_alat' => $request->id_alat,
+            'id_peminjam' => $request->id_peminjam,
+            'jumlah_alat' => $request->jumlah_alat,
+            'confirm_time' => $request->confirm_time,
+            'return_time' => $request->return_time,
+            'keterangan' => $request->keterangan,
+            'status' => "Belum Diverifikasi",
+        ]);
 
-        //  $detailPeminjaman = [
+        $lab = Lab::find($request->id_lab);
+        $alat = AlatLab::find($request->id_alat);
+        $peminjam = User::find($request->id_peminjam);
 
-        //  ];
-        //  $table->string('nama_lab');
-        //  $table->string('nama_alat');
-        //  $table->integer('jumlah_alat');
-        //  $table->string('nama_peminjam');
-        //  $table->string('role_peminjam');
-        //  $table->dateTime('confirm_time')->nullable();
-        //  $table->dateTime('return_time')->nullable();
-        //  $table->text('keterangan');
-        //  $table->string('status');
+        $detailPeminjaman = [
+            'nama_lab' => $lab->nama_lab,
+            'nama_alat' => $alat->nama_alat,
+            'jumlah_alat' => $request->jumlah_alat,
+            'nama_peminjam' => $peminjam->nama,
+            'role_peminjam' => $peminjam->role,
+            'confirm_time' => $request->confirm_time,
+            'return_time' => $request->return_time,
+            'keterangan' => $request->keterangan,
+            'status' => "Belum Diverifikasi",
+        ];
 
-         return response([
-             'message' => 'Data added successfully',
-             'data' => $newData,
-             'lab data' => $lab->nama_lab,
-             'alat data' => $alat->nama_alat,
-             'user data' => $peminjam->nama,
-             'user data 2' => $peminjam->role,
-         ], status: 201);
-     }
+        $newDetailPeminjaman = PeminjamanDetail::create($detailPeminjaman);
+
+        return response([
+            'message' => 'Data added successfully',
+            'data' => $newData,
+            'detail data' => $newDetailPeminjaman,
+            // 'lab data' => $lab->nama_lab,
+            // 'alat data' => $alat->nama_alat,
+            // 'user data' => $peminjam->nama,
+            // 'user data 2' => $peminjam->role,
+        ], status: 201);
+    }
 }
