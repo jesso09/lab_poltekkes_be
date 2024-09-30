@@ -176,7 +176,7 @@ class PeminjamanController extends Controller
 
     public function show($id)
     {
-        $data = PeminjamanAlat::find($id);
+        $data = PeminjamanAlat::with('lab', 'alat', 'peminjam')->find($id);
         if (!$data) {
             return response()->json([
                 'message' => 'data Not Found',
