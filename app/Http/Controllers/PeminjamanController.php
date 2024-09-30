@@ -97,12 +97,13 @@ class PeminjamanController extends Controller
 
     public function store(Request $request)
     {
+        $idUser = Auth::user()->id;
         $newData = $request->all();
         //Validasi Formulir
         $validator = Validator::make($newData, [
             'id_lab' => 'required',
             'id_alat' => 'required',
-            'id_peminjam' => 'required',
+            // 'id_peminjam' => 'required',
             'jumlah_alat' => 'required',
             //  'confirm_time' => 'required',
             //  'return_time' => 'required',
@@ -117,7 +118,7 @@ class PeminjamanController extends Controller
         $newData = PeminjamanAlat::create([
             'id_lab' => $request->id_lab,
             'id_alat' => $request->id_alat,
-            'id_peminjam' => $request->id_peminjam,
+            'id_peminjam' => $idUser,
             'jumlah_alat' => $request->jumlah_alat,
             'confirm_time' => $request->confirm_time,
             'return_time' => $request->return_time,
@@ -127,10 +128,10 @@ class PeminjamanController extends Controller
 
         $lab = Lab::find($request->id_lab);
         $alat = AlatLab::find($request->id_alat);
-        $peminjam = User::find($request->id_peminjam);
+        $peminjam = User::find($idUser);
 
         $detailPeminjaman = [
-            'id_peminjam' => $request->id_peminjam,
+            'id_peminjam' => $idUser,
             'nama_lab' => $lab->nama_lab,
             'nama_alat' => $alat->nama_alat,
             'jumlah_alat' => $request->jumlah_alat,
