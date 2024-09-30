@@ -76,6 +76,7 @@ class PeminjamanController extends Controller
         }
 
         $peminjamanData = PeminjamanDetail::where('id_peminjam', $idUser)->latest()->get();
+
         if (is_null($peminjamanData)) {
             return response([
                 'message' => 'Data not found',
