@@ -173,4 +173,20 @@ class PeminjamanController extends Controller
             ], 200);
         }
     }
+
+    public function show($id)
+    {
+        $data = PeminjamanAlat::find($id);
+        if (!$data) {
+            return response()->json([
+                'message' => 'data Not Found',
+                'data' => $data,
+            ], 404);
+        } else {
+            return response()->json([
+                'message' => 'Data Peminjaman',
+                'data' => $data,
+            ], 200);
+        }
+    }
 }
