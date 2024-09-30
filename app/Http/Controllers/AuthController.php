@@ -55,9 +55,7 @@ class AuthController extends Controller
                     'data' => $user,
                 ], 200);
             }
-
         }
-
     }
 
     public function login(Request $request)

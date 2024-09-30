@@ -64,7 +64,7 @@ class PeminjamanController extends Controller
             'data' => $peminjamanData
         ], 200);
     }
-    
+
     public function historyByUser()
     {
         $idUser = Auth::user()->id;
@@ -154,5 +154,23 @@ class PeminjamanController extends Controller
             // 'user data' => $peminjam->nama,
             // 'user data 2' => $peminjam->role,
         ], status: 201);
+    }
+
+    public function changeStatus(Request $request, $id)
+    {
+        $data = PeminjamanAlat::find($id);
+        if (!$data) {
+            return response()->json([
+                'message' => 'data Not Found',
+                'data' => $data,
+            ], 404);
+        } else {
+            $data->status = $request->new_status;
+            $data->save();
+            return response()->json([
+                'message' => 'Data Peminjaman',
+                'data' => $data,
+            ], 200);
+        }
     }
 }

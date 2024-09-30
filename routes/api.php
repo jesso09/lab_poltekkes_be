@@ -66,4 +66,5 @@ Route::group(['prefix' => 'peminjaman', 'middleware' => ['auth:sanctum']], funct
     Route::get('detail', [PeminjamanController::class, 'indexDetail']);
     Route::get('history', [PeminjamanController::class, 'historyByUser']);
     Route::post('add', [PeminjamanController::class, 'store']);
+    Route::post('status/{id}', [PeminjamanController::class, 'changeStatus']);
 });
