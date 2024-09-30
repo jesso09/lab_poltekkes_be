@@ -166,6 +166,13 @@ class PeminjamanController extends Controller
             ], 404);
         } else {
             $data->status = $request->new_status;
+            if ($request->new_status == "Dikonfirmasi") {
+                $data->confirm_time = $request->confirm_time;
+            }
+            if ($request->new_status == "Dikembalikan") {
+                $data->return_time = $request->return_time;
+            }
+
             $data->save();
             return response()->json([
                 'message' => 'Data Peminjaman',
