@@ -129,6 +129,7 @@ class PeminjamanController extends Controller
         $peminjam = User::find($request->id_peminjam);
 
         $detailPeminjaman = [
+            'id_peminjam' => $request->id_peminjam,
             'nama_lab' => $lab->nama_lab,
             'nama_alat' => $alat->nama_alat,
             'jumlah_alat' => $request->jumlah_alat,

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('peminjaman_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_peminjam')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('nama_lab');
             $table->string('nama_alat');
             $table->integer('jumlah_alat');

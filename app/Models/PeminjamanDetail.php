@@ -9,6 +9,7 @@ class PeminjamanDetail extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id_peminjam',
         'nama_lab',
         'nama_alat',
         'jumlah_alat',
