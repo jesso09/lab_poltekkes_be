@@ -101,7 +101,10 @@ class AuthController extends Controller
                     'message' => 'Login Failed',
                 ], 401);
             } else {
-
+                Fcm::create([
+                    'id_user' => $user->id,
+                    'fcm_token' => $request->fcm_token,
+                ]);
                 // $auth = Auth::user();
                 // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
