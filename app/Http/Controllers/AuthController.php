@@ -96,9 +96,11 @@ class AuthController extends Controller
             ], 401);
         } else {
             if ($user->status != "Diblokir") {
+                $token = $user->createToken('auth_token')->plainTextToken;
+                
                 return response([
                     'role' => $user->role,
-                    // 'token' => $token,
+                    'token' => $token,
                     'user' => $user,
                     'message' => 'Login Successfully',
                 ]);
@@ -106,7 +108,6 @@ class AuthController extends Controller
             } else {
                 
                 // $auth = Auth::user();
-                // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
                 // $user->save();
