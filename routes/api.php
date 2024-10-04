@@ -31,6 +31,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum']], function () {
     Route::get('user', [AuthController::class, 'indexUser']);
     Route::post('status/{nipOrUsername}', [AuthController::class, 'changeStatusUser']);
+    Route::get('status/{idUser}', [AuthController::class, 'getUserToken']);
 });
 
 // Route::group(['prefix' => 'auth', 'middleware' => ['auth:sanctum']], function () {
