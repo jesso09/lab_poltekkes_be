@@ -65,7 +65,7 @@ class AuthController extends Controller
         $validate = Validator::make($loginData, [
             'username_or_nip' => 'required',
             'password' => 'required',
-            'fcm_token' => 'required',
+            // 'fcm_token' => 'required',
         ]);
 
         if ($validate->fails()) {
