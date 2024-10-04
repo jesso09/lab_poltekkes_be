@@ -236,6 +236,36 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * store
+     *
+     * @param Request $request
+     */
+
+     public function makeFCM(Request $request)
+     {
+         $idUser = Auth::user()->id;
+         $newData = $request->all();
+         //Validasi Formulir
+         $validator = Validator::make($newData, [
+             'fcm_token' => 'required',
+         ], [
+         ]);
+         if ($validator->fails()) {
+             return response(['message' => $validator->errors()], 400);
+         }
+ 
+         $newData =  Fcm::create([
+            'id_user' => $idUser,
+            'fcm_token' => $request->fcm_token,
+        ]);
+ 
+         return response([
+             'message' => 'Data added successfully',
+             'data' => $newData,
+         ], status: 201);
+     }
+
     public function getUserToken($id)
     {
         $userToken = Fcm::where('id_user', $id)->latest()->get();
