@@ -102,24 +102,13 @@ class AuthController extends Controller
                 ], 401);
             } else {
 
-                // $existingToken = Fcm::where('id_user', $user->id)
-                //     ->where('fcm_token', $request->fcm_token)
-                //     ->first();
-
-                //     if (!$existingToken) {
-                //         # code...
-                //     }
-                // $newToken = Fcm::create([
-                //     'id_user' => $user->id,
-                //     'fcm_token' => $request->fcm_token,
-                // ]);
-                // // $auth = Auth::user();
+                // $auth = Auth::user();
                 // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
                 // $user->save();
                 return response([
-                    'role' => $user->id,
+                    'role' => $user->role,
                     // 'token' => $token,
                     'user' => $user,
                     'message' => 'Login Successfully',
