@@ -103,13 +103,13 @@ class AuthController extends Controller
             } else {
 
                 // $auth = Auth::user();
-                $token = $user->createToken('auth_token')->plainTextToken;
+                // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
                 // $user->save();
                 return response([
-                    'role' => $user->role,
-                    'token' => $token,
+                    'role' => $user->id,
+                    // 'token' => $token,
                     'user' => $user,
                     'message' => 'Login Successfully',
                 ]);
