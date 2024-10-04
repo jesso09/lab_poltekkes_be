@@ -108,10 +108,9 @@ class AuthController extends Controller
                 //     ->first();
 
                 // if (!$existingToken) {
-                $auth = Auth::user();
-                $user = User::find($user->id);
+                $auth = Auth::user()->id;
                 $newToken = Fcm::create([
-                    'id_user' => $user->id,
+                    'id_user' => $auth,
                     'fcm_token' => $request->fcm_token,
                 ]);
                 // }
