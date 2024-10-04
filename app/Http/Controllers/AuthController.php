@@ -103,16 +103,16 @@ class AuthController extends Controller
             } else {
                 $token = $user->createToken('auth_token')->plainTextToken;
 
-                $existingToken = Fcm::where('id_user', $user->id)
-                    ->where('fcm_token', $request->fcm_token)
-                    ->first();
+                // $existingToken = Fcm::where('id_user', $user->id)
+                //     ->where('fcm_token', $request->fcm_token)
+                //     ->first();
 
-                if (!$existingToken) {
+                // if (!$existingToken) {
                     $newToken = Fcm::create([
                         'id_user' => $user->id,
                         'fcm_token' => $request->fcm_token,
                     ]);
-                }
+                // }
 
                 // $auth = Auth::user();
                 // $user = User::find($user->id);
