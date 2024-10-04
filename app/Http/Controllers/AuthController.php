@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Fcm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -94,17 +95,25 @@ class AuthController extends Controller
                 'message' => 'Wrong NIP or Username',
             ], 401);
         } else {
-            // $auth = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
-            // $user = User::find($user->id);
-            // $user->fcm_token = $request->fcm_token;
-            // $user->save();
-            return response([
-                'role' => $user->role,
-                'token' => $token,
-                'user' => $user,
-                'message' => 'Login Successfully',
-            ]);
+            if ($user->status == "Diblokir") {
+                return response([
+                    'user' => $user,
+                    'message' => 'Login Failed',
+                ]);
+            } else {
+
+                // $auth = Auth::user();
+                $token = $user->createToken('auth_token')->plainTextToken;
+                // $user = User::find($user->id);
+                // $user->fcm_token = $request->fcm_token;
+                // $user->save();
+                return response([
+                    'role' => $user->role,
+                    'token' => $token,
+                    'user' => $user,
+                    'message' => 'Login Successfully',
+                ]);
+            }
         }
     }
 
@@ -224,18 +233,18 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function getUserById($id)
+    public function getUserToken($id)
     {
-        $user = User::with('vet', 'petShop', 'customer')->find($id);
+        $userToken = Fcm::where('id_user ', $id)->latest()->get();
 
-        if (!$user) {
+        if (!$userToken) {
             return response()->json([
-                'data' => $user,
+                'data' => $userToken,
                 'message' => "User not found",
             ], 400);
         }
         return response()->json([
-            'data' => $user,
+            'data' => $userToken,
         ], 200);
     }
 }
