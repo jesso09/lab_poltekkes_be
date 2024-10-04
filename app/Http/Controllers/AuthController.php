@@ -65,7 +65,7 @@ class AuthController extends Controller
         $validate = Validator::make($loginData, [
             'username_or_nip' => 'required',
             'password' => 'required',
-            // 'fcm_token' => 'required',
+            'fcm_token' => 'required',
         ]);
 
         if ($validate->fails()) {
@@ -101,15 +101,27 @@ class AuthController extends Controller
                     'message' => 'Login Failed',
                 ], 401);
             } else {
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                $existingToken = Fcm::where('id_user', $user->id)
+                    ->where('fcm_token', $request->fcm_token)
+                    ->first();
+
+                if (!$existingToken) {
+                    $newToken = Fcm::create([
+                        'id_user' => $user->id,
+                        'fcm_token' => $request->fcm_token,
+                    ]);
+                }
 
                 // $auth = Auth::user();
-                // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
                 // $user->save();
                 return response([
                     'role' => $user->id,
-                    // 'token' => $token,
+                    'token' => $token,
+                    'new FCM' => $newToken,
                     'user' => $user,
                     'message' => 'Login Successfully',
                 ]);
