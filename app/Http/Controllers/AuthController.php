@@ -235,7 +235,7 @@ class AuthController extends Controller
 
     public function getUserToken($id)
     {
-        $userToken = Fcm::where('id_user ', $id)->latest()->get();
+        $userToken = Fcm::where('id_user', $id)->latest()->get();
 
         if (!$userToken) {
             return response()->json([
