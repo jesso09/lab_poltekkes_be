@@ -87,7 +87,7 @@ class AuthController extends Controller
         }
 
         $password = bcrypt($request->password);
-        $user = User::where('username_or_nip', $request->username_or_nip)->where('password', $password)->first();
+        $user = User::where('username_or_nip', $request->username_or_nip)->first();
 
         if (!Auth::attempt($loginData)) {
             return response([
@@ -95,24 +95,18 @@ class AuthController extends Controller
                 'message' => 'Wrong NIP or Username',
             ], 401);
         } else {
-            // $token = $user->createToken('auth_token')->plainTextToken;
-
             if ($user->status != "Diblokir") {
-                Fcm::create([
-                    'id_user' => $user->id,
-                    'fcm_token' => $request->fcm_token,
-                ]);
-
                 return response([
                     'role' => $user->role,
                     // 'token' => $token,
                     'user' => $user,
                     'message' => 'Login Successfully',
                 ]);
-
+                
             } else {
-
+                
                 // $auth = Auth::user();
+                // $token = $user->createToken('auth_token')->plainTextToken;
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
                 // $user->save();
@@ -120,7 +114,7 @@ class AuthController extends Controller
                     'user' => $user,
                     'message' => 'Login Failed',
                 ], 401);
-
+                
             }
         }
     }
