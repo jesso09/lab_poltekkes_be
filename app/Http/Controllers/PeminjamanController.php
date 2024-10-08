@@ -173,11 +173,13 @@ class PeminjamanController extends Controller
             //     $data->return_time = $request->return_time;
             // }
             $dataAlat = AlatLab::find($data->id_alat);
+
+            $newJumlah = $dataAlat->jumlah - $data->jumlah_alat;
             // $data->save();
             return response()->json([
                 'message' => 'Data Peminjaman',
                 'data' => $data,
-                'alat' => $dataAlat,
+                'alat' => $newJumlah,
             ], 200);
         }
     }
