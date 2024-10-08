@@ -165,18 +165,19 @@ class PeminjamanController extends Controller
                 'data' => $data,
             ], 404);
         } else {
-            $data->status = $request->new_status;
-            if ($request->new_status == "Dikonfirmasi") {
-                $data->confirm_time = $request->confirm_time;
-            }
-            if ($request->new_status == "Dikembalikan") {
-                $data->return_time = $request->return_time;
-            }
-
-            $data->save();
+            // $data->status = $request->new_status;
+            // if ($request->new_status == "Dikonfirmasi") {
+            //     $data->confirm_time = $request->confirm_time;
+            // }
+            // if ($request->new_status == "Dikembalikan") {
+            //     $data->return_time = $request->return_time;
+            // }
+            $dataAlat = AlatLab::find($data->id_alat);
+            // $data->save();
             return response()->json([
                 'message' => 'Data Peminjaman',
                 'data' => $data,
+                'alat' => $dataAlat,
             ], 200);
         }
     }
