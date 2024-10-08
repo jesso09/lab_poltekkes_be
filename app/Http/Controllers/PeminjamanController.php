@@ -178,7 +178,7 @@ class PeminjamanController extends Controller
 
                 $dataAlat->jumlah -= $data->jumlah_alat;
 
-                if ($dataAlat->jumlah <= 0) {
+                if ($dataAlat->jumlah < 0) {
                     return response()->json([
                         'message' => 'Failed To Confirm Data',
                         'data' => $data,
