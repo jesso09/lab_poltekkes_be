@@ -259,22 +259,22 @@ class AuthController extends Controller
             ->where('fcm_token', $request->fcm_token)
             ->first();
 
-        if ($existingData) {
+        if (!$existingData) {
+            $newData = Fcm::create([
+                'id_user' => $idUser,
+                'fcm_token' => $request->fcm_token,
+            ]);
+
             return response([
-                'message' => 'Data with the same user ID and FCM token already exists',
-                'data' => $existingData,
-            ], 200);
+                'message' => 'Data added successfully',
+                'data' => $newData,
+            ], status: 201);
         }
 
-        $newData = Fcm::create([
-            'id_user' => $idUser,
-            'fcm_token' => $request->fcm_token,
-        ]);
-
         return response([
-            'message' => 'Data added successfully',
-            'data' => $newData,
-        ], status: 201);
+            'message' => 'Data with the same user ID and FCM token already exists',
+            'data' => $existingData,
+        ], 200);
     }
 
     public function getUserToken($id)
