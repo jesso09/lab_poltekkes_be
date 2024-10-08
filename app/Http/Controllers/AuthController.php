@@ -97,16 +97,16 @@ class AuthController extends Controller
         } else {
             if ($user->status != "Diblokir") {
                 $token = $user->createToken('auth_token')->plainTextToken;
-                
+
                 return response([
                     'role' => $user->role,
                     'token' => $token,
                     'user' => $user,
                     'message' => 'Login Successfully',
                 ]);
-                
+
             } else {
-                
+
                 // $auth = Auth::user();
                 // $user = User::find($user->id);
                 // $user->fcm_token = $request->fcm_token;
@@ -115,7 +115,7 @@ class AuthController extends Controller
                     'user' => $user,
                     'message' => 'Login Failed',
                 ], 401);
-                
+
             }
         }
     }
@@ -242,29 +242,40 @@ class AuthController extends Controller
      * @param Request $request
      */
 
-     public function makeFCM(Request $request)
-     {
-         $idUser = Auth::user()->id;
-         $newData = $request->all();
-         //Validasi Formulir
-         $validator = Validator::make($newData, [
-             'fcm_token' => 'required',
-         ], [
-         ]);
-         if ($validator->fails()) {
-             return response(['message' => $validator->errors()], 400);
-         }
- 
-         $newData =  Fcm::create([
+    public function makeFCM(Request $request)
+    {
+        $idUser = Auth::user()->id;
+        $newData = $request->all();
+        //Validasi Formulir
+        $validator = Validator::make($newData, [
+            'fcm_token' => 'required',
+        ], [
+        ]);
+        if ($validator->fails()) {
+            return response(['message' => $validator->errors()], 400);
+        }
+
+        $existingData = Fcm::where('id_user', $idUser)
+            ->where('fcm_token', $request->fcm_token)
+            ->first();
+
+        if ($existingData) {
+            return response([
+                'message' => 'Data with the same user ID and FCM token already exists',
+                'data' => $existingData,
+            ], 200);
+        }
+
+        $newData = Fcm::create([
             'id_user' => $idUser,
             'fcm_token' => $request->fcm_token,
         ]);
- 
-         return response([
-             'message' => 'Data added successfully',
-             'data' => $newData,
-         ], status: 201);
-     }
+
+        return response([
+            'message' => 'Data added successfully',
+            'data' => $newData,
+        ], status: 201);
+    }
 
     public function getUserToken($id)
     {
