@@ -161,16 +161,29 @@ class PeminjamanController extends Controller
         $data = PeminjamanAlat::find($id);
         if (!$data) {
             return response()->json([
-                'message' => 'data Not Found',
+                'message' => 'Data Not Found',
                 'data' => $data,
             ], 404);
         } else {
+            if ($data->status == $request->new_status) {
+                return response()->json([
+                    'message' => 'Data Already With This Status',
+                    'data' => $data,
+                ], 400);
+            }
             $data->status = $request->new_status;
             if ($request->new_status == "Dikonfirmasi") {
                 $data->confirm_time = $request->confirm_time;
                 $dataAlat = AlatLab::find($data->id_alat);
 
                 $dataAlat->jumlah -= $data->jumlah_alat;
+
+                if ($dataAlat->jumlah <= 0) {
+                    return response()->json([
+                        'message' => 'Failed To Confirm Data',
+                        'data' => $data,
+                    ], 400);
+                }
 
                 $dataAlat->save();
             }
@@ -179,7 +192,7 @@ class PeminjamanController extends Controller
                 $dataAlat = AlatLab::find($data->id_alat);
 
                 $dataAlat->jumlah += $data->jumlah_alat;
-                
+
                 $dataAlat->save();
             }
 
