@@ -271,10 +271,10 @@ class AuthController extends Controller
             ], status: 201);
         }
 
-        return response([
-            'message' => 'Data with the same user ID and FCM token already exists',
-            'data' => $existingData,
-        ], 200);
+        // return response([
+        //     'message' => 'Data with the same user ID and FCM token already exists',
+        //     'data' => $existingData,
+        // ], 200);
     }
 
     public function getUserToken($id)
