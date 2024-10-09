@@ -182,57 +182,22 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function logout()
+    public function logout(Request $request)
     {
         $user = Auth::user();
         $userLogout = User::find($user->id);
 
-        // $userLogout->fcm_token = null;
-        $userLogout->save();
+        $fcmToken = Fcm::where('id_user', $user->id)
+        ->where('fcm_token', $request->fcm_token)
+        ->first();
+        // $userLogout->save();
 
         // ~ Udah jalan emang kebaca error aja
-        $user->currentAccessToken()->delete();
+        // $user->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out',
-        ], 200);
-    }
-
-    public function getUser()
-    {
-        $user = Auth::user();
-
-        switch ($user->role) {
-            case 'Customer':
-                // $data = $user->customer->with('customer');
-                // $data->customer_id = $data->id;
-                $message = 'Profile Customer';
-                $data = User::with('vet', 'petShop', 'customer')->find($user->id);
-                break;
-
-            case 'Vet':
-                // $data = $user->vet;
-                // $data->vet_id = $data->id;
-                $message = ' Profile Vet';
-                $data = User::with('vet', 'petShop', 'customer')->find($user->id);
-                break;
-
-            case 'Pet Shop':
-                $message = ' Profile Pet Shop';
-                $data = User::with('vet', 'petShop', 'customer')->find($user->id);
-                break;
-
-            default:
-                $data = null;
-                $message = 'Unknown role';
-                break;
-        }
-
-        return response()->json([
-            'data' => $data,
-            'email' => $user->email,
-            'message' => $message,
-            'role' => $user->role,
+            'test' => $fcmToken,
         ], 200);
     }
 
