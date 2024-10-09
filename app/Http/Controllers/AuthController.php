@@ -190,10 +190,11 @@ class AuthController extends Controller
         $fcmToken = Fcm::where('id_user', $user->id)
         ->where('fcm_token', $request->fcm_token)
         ->first();
-        // $userLogout->save();
+        
+        $fcmToken->delete();
 
         // ~ Udah jalan emang kebaca error aja
-        // $user->currentAccessToken()->delete();
+        $user->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out',
