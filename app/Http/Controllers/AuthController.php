@@ -95,7 +95,7 @@ class AuthController extends Controller
                 'message' => 'Wrong NIP or Username',
             ], 401);
         } else {
-            // if ($user->status != "Diblokir") {
+            if ($user->status == "Diverifikasi" || $user->status == "Belum Diverifikasi") {
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 return response([
@@ -105,18 +105,18 @@ class AuthController extends Controller
                     'message' => 'Login Successfully',
                 ]);
 
-            // } else {
+            } else {
 
-            //     // $auth = Auth::user();
-            //     // $user = User::find($user->id);
-            //     // $user->fcm_token = $request->fcm_token;
-            //     // $user->save();
-            //     return response([
-            //         'user' => $user,
-            //         'message' => 'Login Failed',
-            //     ], 401);
+                // $auth = Auth::user();
+                // $user = User::find($user->id);
+                // $user->fcm_token = $request->fcm_token;
+                // $user->save();
+                return response([
+                    'user' => $user,
+                    'message' => 'Login Failed',
+                ], 401);
 
-            // }
+            }
         }
     }
 
