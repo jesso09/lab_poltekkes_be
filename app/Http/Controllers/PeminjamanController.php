@@ -178,34 +178,37 @@ class PeminjamanController extends Controller
                 ], 400);
             }
             $data->status = $request->new_status;
-            if ($data->alat->keterangan == "Dihapus") {
-                return response()->json([
-                    'message' => 'Peminjaman Tidak Dapat Dilanjutkan',
-                    'data' => $data,
-                ], 400);
-            }
-            if ($request->new_status == "Dikonfirmasi") {
-                $data->confirm_time = $request->confirm_time;
-                $dataAlat = AlatLab::find($data->id_alat);
-
-                $dataAlat->jumlah -= $data->jumlah_alat;
-
-                if ($dataAlat->jumlah < 0) {
+            if ($request->new_status != "Dibatalkan") {
+                # code...
+                if ($data->alat->keterangan == "Dihapus" || $data->lab->lokasi == "Dihapus" || $data->peminjam->status == "Diblokir") {
                     return response()->json([
-                        'message' => 'Failed To Confirm Data',
+                        'message' => 'Peminjaman Tidak Dapat Dilanjutkan',
                         'data' => $data,
-                    ], 400);
+                    ], 403);
                 }
+                if ($request->new_status == "Dikonfirmasi") {
+                    $data->confirm_time = $request->confirm_time;
+                    $dataAlat = AlatLab::find($data->id_alat);
 
-                $dataAlat->save();
-            }
-            if ($request->new_status == "Dikembalikan") {
-                $data->return_time = $request->return_time;
-                $dataAlat = AlatLab::find($data->id_alat);
+                    $dataAlat->jumlah -= $data->jumlah_alat;
 
-                $dataAlat->jumlah += $data->jumlah_alat;
+                    if ($dataAlat->jumlah < 0) {
+                        return response()->json([
+                            'message' => 'Failed To Confirm Data',
+                            'data' => $data,
+                        ], 400);
+                    }
 
-                $dataAlat->save();
+                    $dataAlat->save();
+                }
+                if ($request->new_status == "Dikembalikan") {
+                    $data->return_time = $request->return_time;
+                    $dataAlat = AlatLab::find($data->id_alat);
+
+                    $dataAlat->jumlah += $data->jumlah_alat;
+
+                    $dataAlat->save();
+                }
             }
 
 
