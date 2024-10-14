@@ -179,7 +179,6 @@ class PeminjamanController extends Controller
             }
             $data->status = $request->new_status;
             if ($request->new_status != "Dibatalkan") {
-                # code...
                 if ($data->alat->keterangan == "Dihapus" || $data->lab->lokasi == "Dihapus" || $data->peminjam->status == "Diblokir") {
                     return response()->json([
                         'message' => 'Peminjaman Tidak Dapat Dilanjutkan',
@@ -216,7 +215,7 @@ class PeminjamanController extends Controller
             return response()->json([
                 'message' => 'Data Peminjaman',
                 'data' => $data,
-                'alat' => $dataAlat,
+                // 'alat' => $dataAlat,
             ], 200);
         }
     }
