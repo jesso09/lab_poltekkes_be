@@ -48,19 +48,22 @@ Route::group(['prefix' => 'lab', 'middleware' => ['auth:sanctum']], function () 
     Route::get('index', [LabController::class, 'index']);
     Route::post('add', [LabController::class, 'store']);
     Route::post('edit/{id}', [LabController::class, 'update']);
-
+    Route::delete('delete/{id}', [LabController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'jadwal', 'middleware' => ['auth:sanctum']], function () {
     Route::get('index', [JadwalController::class, 'index']);
+    Route::get('all', [JadwalController::class, 'indexAll']);
     Route::post('add', [JadwalController::class, 'store']);
     Route::post('edit/{id}', [JadwalController::class, 'update']);
+    Route::delete('delete/{id}', [JadwalController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'alat', 'middleware' => ['auth:sanctum']], function () {
     Route::get('index/{idLab}', [AlatController::class, 'index']);
     Route::post('add', [AlatController::class, 'store']);
     Route::post('edit/{id}', [AlatController::class, 'update']);
+    Route::delete('delete/{id}', [AlatController::class, 'destroy']);
 });
 
 Route::group(['prefix' => 'peminjaman', 'middleware' => ['auth:sanctum']], function () {

@@ -164,4 +164,26 @@ class AlatController extends Controller
             'data' => null
         ], 400);
     }
+
+    public function destroy($id)
+    {
+        $targetData = AlatLab::find($id);
+
+        if (!$targetData) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        // Hapus file gambar jika ada
+        if ($targetData->foto_alat) {
+            unlink(public_path('storage/public/alat/' . $targetData->foto_alat));
+        }
+
+        // Hapus konten dari database
+        $targetData->delete();
+
+        return response()->json([
+            'message' => 'Data deleted successfully',
+            'data' => $targetData,
+        ], 200);
+    }
 }

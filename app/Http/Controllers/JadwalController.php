@@ -45,6 +45,25 @@ class JadwalController extends Controller
         ], 200);
     }
 
+    public function indexAll()
+    {
+
+        $jadwalData = Jadwal::with('lab')
+            ->latest()
+            ->get();
+
+        if (is_null($jadwalData)) {
+            return response([
+                'message' => 'Data not found',
+                'data' => $jadwalData
+            ], 404);
+        }
+        return response([
+            'message' => 'Data Jadwal',
+            'data' => $jadwalData,
+        ], 200);
+    }
+
     /**
      * store
      *
@@ -134,5 +153,16 @@ class JadwalController extends Controller
             'message' => 'Failed to update data',
             'data' => null
         ], 400);
+    }
+
+    public function destroy($id)
+    {
+        $targetData = Jadwal::find($id);
+        $targetData->delete();
+
+        return response()->json([
+            'message' => 'Activity deleted successfully',
+            'data' => $targetData,
+        ]);
     }
 }

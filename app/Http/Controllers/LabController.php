@@ -161,4 +161,26 @@ class LabController extends Controller
             'data' => null
         ], 400);
     }
+
+    public function destroy($id)
+    {
+        $targetData = Lab::find($id);
+
+        if (!$targetData) {
+            return response()->json(['message' => 'Data not found'], 404);
+        }
+
+        // Hapus file gambar jika ada
+        if ($targetData->foto_lab) {
+            unlink(public_path('storage/public/lab/' . $targetData->foto_lab));
+        }
+
+        // Hapus konten dari database
+        $targetData->delete();
+
+        return response()->json([
+            'message' => 'Data deleted successfully',
+            'data' => $targetData,
+        ], 200);
+    }
 }
