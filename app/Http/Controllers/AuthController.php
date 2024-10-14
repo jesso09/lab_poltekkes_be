@@ -114,7 +114,7 @@ class AuthController extends Controller
                 return response([
                     'user' => $user,
                     'message' => 'Login Failed',
-                ], 401);
+                ], 403);
 
             }
         }
