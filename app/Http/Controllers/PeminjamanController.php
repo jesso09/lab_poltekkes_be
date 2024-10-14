@@ -130,6 +130,12 @@ class PeminjamanController extends Controller
         $alat = AlatLab::find($request->id_alat);
         $peminjam = User::find($idUser);
 
+        if ($lab->lokasi == "Dihapus" || $alat->keterangan == "Dihapus" || $peminjam->status == "Diblokir") {
+            return response([
+                'message' => 'Tidak dapat melakukan peminjaman',
+            ], status: 403);
+        }
+
         $detailPeminjaman = [
             'id_peminjam' => $idUser,
             'nama_lab' => $lab->nama_lab,
