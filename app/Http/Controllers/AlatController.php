@@ -176,10 +176,12 @@ class AlatController extends Controller
         // Hapus file gambar jika ada
         if ($targetData->foto_alat) {
             unlink(public_path('storage/assets/' . $targetData->foto_alat));
+            $targetData->foto_alat = null;
         }
 
         // Hapus konten dari database
         $targetData->keterangan = "Dihapus";
+        $targetData->save();
 
         return response()->json([
             'message' => 'Data deleted successfully',
