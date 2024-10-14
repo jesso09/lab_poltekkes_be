@@ -178,6 +178,12 @@ class PeminjamanController extends Controller
                 ], 400);
             }
             $data->status = $request->new_status;
+            if ($data->alat->keterangan == "Dihapus") {
+                return response()->json([
+                    'message' => 'Peminjaman Tidak Dapat Dilanjutkan',
+                    'data' => $data,
+                ], 400);
+            }
             if ($request->new_status == "Dikonfirmasi") {
                 $data->confirm_time = $request->confirm_time;
                 $dataAlat = AlatLab::find($data->id_alat);
