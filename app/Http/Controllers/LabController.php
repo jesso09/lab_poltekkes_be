@@ -172,11 +172,13 @@ class LabController extends Controller
 
         // Hapus file gambar jika ada
         if ($targetData->foto_lab) {
-            unlink(public_path('storage/public/lab/' . $targetData->foto_lab));
+            unlink(public_path('storage/assets/' . $targetData->foto_lab));
+            $targetData->foto_lab = null;
         }
 
         // Hapus konten dari database
-        $targetData->delete();
+        $targetData->lokasi = "Dihapus";
+        $targetData->save();
 
         return response()->json([
             'message' => 'Data deleted successfully',
