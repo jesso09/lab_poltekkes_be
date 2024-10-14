@@ -32,6 +32,17 @@ class AuthController extends Controller
 
     }
 
+    public function getUserStatus()
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'message' => 'Data User',
+            'data' => $user->status,
+        ], 200);
+    }
+
+
     public function changeStatusUser(Request $request, $nipOrUsername)
     {
         $admin = Auth::user();
@@ -188,9 +199,9 @@ class AuthController extends Controller
         $userLogout = User::find($user->id);
 
         $fcmToken = Fcm::where('id_user', $user->id)
-        ->where('fcm_token', $request->fcm_token)
-        ->first();
-        
+            ->where('fcm_token', $request->fcm_token)
+            ->first();
+
         $fcmToken->delete();
 
         // ~ Udah jalan emang kebaca error aja
