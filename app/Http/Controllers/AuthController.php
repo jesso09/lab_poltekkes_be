@@ -17,7 +17,7 @@ class AuthController extends Controller
     {
         $admin = Auth::user();
 
-        if ($admin->role != 'Admin') {
+        if ($admin->role != 'Admin' && $admin->role != "PLP") {
             return response([
                 'status' => 401,
                 'message' => "Only Admin Can Access"
