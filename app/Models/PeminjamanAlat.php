@@ -9,26 +9,26 @@ class PeminjamanAlat extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id_lab',
-        'id_alat',
         'id_peminjam',
-        'jumlah_alat',
+        'id_lab',
+        'start_borrow',
+        'end_borrow',
         'confirm_time',
         'return_time',
         'keterangan',
-        'status',
     ];
-
+    public function peminjam()
+    {
+        return $this->belongsTo(User::class, 'id_peminjam');
+    }
+    
     public function lab()
     {
         return $this->belongsTo(Lab::class, 'id_lab');
     }
-    public function alat()
+
+    public function detailPeminjaman()
     {
-        return $this->belongsTo(AlatLab::class, 'id_alat');
-    }
-    public function peminjam()
-    {
-        return $this->belongsTo(User::class, 'id_peminjam');
+        return $this->hasMany(PeminjamanDetail::class, 'id_peminjaman');
     }
 }

@@ -9,15 +9,21 @@ class PeminjamanDetail extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'id_peminjam',
-        'nama_lab',
-        'nama_alat',
+        'id_peminjaman',
+        'id_alat',
         'jumlah_alat',
-        'nama_peminjam',
-        'role_peminjam',
         'confirm_time',
         'return_time',
-        'keterangan',
         'status',
     ];
+
+    public function alat()
+    {
+        return $this->belongsTo(AlatLab::class, 'id_alat');
+    }
+
+    public function peminjaman()
+    {
+        return $this->belongsTo(PeminjamanAlat::class, 'id_peminjaman');
+    }
 }

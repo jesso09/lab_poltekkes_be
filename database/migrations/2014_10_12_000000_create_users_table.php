@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('username_or_nip')->unique();
             // $table->string('username')->unique()->nullable();
+            $table->string('no_telp')->nullable();
             $table->string('role');
             $table->string('password');
             $table->string('status');

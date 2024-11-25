@@ -14,7 +14,27 @@ class PeminjamanController extends Controller
 {
     public function index()
     {
-        $peminjamanData = PeminjamanAlat::with('lab', 'alat', 'peminjam')->latest()->get();
+        $peminjamanData = PeminjamanAlat::with('lab', 'detailPeminjaman.alat', 'peminjam')->latest()->get();
+        if (is_null($peminjamanData)) {
+            return response([
+                'message' => 'Data not found',
+                'data' => $peminjamanData
+            ], 404);
+        }
+        return response([
+            'message' => 'Data Peminjaman',
+            'data' => $peminjamanData
+        ], 200);
+    }
+
+    public function indexByLab($plp)
+    {
+        $peminjamanData = PeminjamanAlat::whereHas('lab', function ($query) use ($plp) {
+            $query->where('plp', $plp);
+        })
+            ->with('lab', 'detailPeminjaman.alat', 'peminjam')
+            ->latest()
+            ->get();
         if (is_null($peminjamanData)) {
             return response([
                 'message' => 'Data not found',
@@ -37,7 +57,7 @@ class PeminjamanController extends Controller
             ], 404);
         }
 
-        $peminjamanData = PeminjamanAlat::where('id_peminjam', $idUser)->with('lab', 'alat', 'peminjam')->latest()->get();
+        $peminjamanData = PeminjamanAlat::where('id_peminjam', $idUser)->with('lab', 'detailPeminjaman.alat', 'peminjam')->latest()->get();
         if (is_null($peminjamanData)) {
             return response([
                 'message' => 'Data not found',
@@ -102,69 +122,62 @@ class PeminjamanController extends Controller
         //Validasi Formulir
         $validator = Validator::make($newData, [
             'id_lab' => 'required',
-            'id_alat' => 'required',
-            // 'id_peminjam' => 'required',
-            'jumlah_alat' => 'required',
-            //  'confirm_time' => 'required',
-            //  'return_time' => 'required',
+            'start_borrow' => 'required',
+            'end_borrow' => 'required',
             'keterangan' => 'required',
-            //  'status' => 'required',
+
+            'detail_peminjaman' => 'required|array',
+            'detail_peminjaman.*.id_alat' => 'required',
+            'detail_peminjaman.*.jumlah_alat' => 'required',
+
         ], [
         ]);
         if ($validator->fails()) {
             return response(['message' => $validator->errors()], 400);
         }
 
-        $newData = PeminjamanAlat::create([
-            'id_lab' => $request->id_lab,
-            'id_alat' => $request->id_alat,
-            'id_peminjam' => $idUser,
-            'jumlah_alat' => $request->jumlah_alat,
-            'confirm_time' => $request->confirm_time,
-            'return_time' => $request->return_time,
-            'keterangan' => $request->keterangan,
-            'status' => "Belum Dikonfirmasi",
-        ]);
-
         $lab = Lab::find($request->id_lab);
-        $alat = AlatLab::find($request->id_alat);
         $peminjam = User::find($idUser);
 
-        if ($lab->lokasi == "Dihapus" || $alat->keterangan == "Dihapus" || $peminjam->status == "Diblokir") {
+        if ($lab->lokasi == "Dihapus" || $peminjam->status == "Diblokir") {
             return response([
                 'message' => 'Tidak dapat melakukan peminjaman',
             ], status: 403);
         }
 
-        $detailPeminjaman = [
+        $newData = PeminjamanAlat::create([
             'id_peminjam' => $idUser,
-            'nama_lab' => $lab->nama_lab,
-            'nama_alat' => $alat->nama_alat,
-            'jumlah_alat' => $request->jumlah_alat,
-            'nama_peminjam' => $peminjam->nama,
-            'role_peminjam' => $peminjam->role,
-            'confirm_time' => $request->confirm_time,
-            'return_time' => $request->return_time,
+            'id_lab' => $request->id_lab,
+            'start_borrow' => $request->start_borrow,
+            'end_borrow' => $request->end_borrow,
             'keterangan' => $request->keterangan,
-            'status' => "Belum Dikonfirmasi",
-        ];
+        ]);
 
-        $newDetailPeminjaman = PeminjamanDetail::create($detailPeminjaman);
+        foreach ($request->detail_peminjaman as $detail) {
+            $newDetailData = $newData->detailPeminjaman()->create([
+                'id_alat' => $detail['id_alat'],
+                'jumlah_alat' => $detail['jumlah_alat'],
+                'status' => "Belum Dikonfirmasi",
+            ]);
+        }
 
         return response([
             'message' => 'Data added successfully',
             'data' => $newData,
-            'detail data' => $newDetailPeminjaman,
-            // 'lab data' => $lab->nama_lab,
-            // 'alat data' => $alat->nama_alat,
-            // 'user data' => $peminjam->nama,
-            // 'user data 2' => $peminjam->role,
+            'detail data' => $newDetailData,
         ], status: 201);
     }
 
     public function changeStatus(Request $request, $id)
     {
-        $data = PeminjamanAlat::find($id);
+        $user = Auth::user();
+        $data = PeminjamanDetail::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Proses Tidak Dapat Dilanjutkan',
+            ], 401);
+        }
         if (!$data) {
             return response()->json([
                 'message' => 'Data Not Found',
@@ -178,8 +191,9 @@ class PeminjamanController extends Controller
                 ], 400);
             }
             $data->status = $request->new_status;
+
             if ($request->new_status != "Dibatalkan") {
-                if ($data->alat->keterangan == "Dihapus" || $data->lab->lokasi == "Dihapus" || $data->peminjam->status == "Diblokir") {
+                if ($data->alat->keterangan == "Dihapus" || $user->status == "Diblokir") {
                     return response()->json([
                         'message' => 'Peminjaman Tidak Dapat Dilanjutkan',
                         'data' => $data,
@@ -222,7 +236,7 @@ class PeminjamanController extends Controller
 
     public function show($id)
     {
-        $data = PeminjamanAlat::with('lab', 'alat', 'peminjam')->find($id);
+        $data = PeminjamanAlat::with('lab', 'detailPeminjaman.alat', 'peminjam')->find($id);
         if (!$data) {
             return response()->json([
                 'message' => 'data Not Found',
