@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'fcm_token',
         'nama',
+        'no_telp',
         // 'nip',
         'username_or_nip',
         'role',

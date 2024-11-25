@@ -146,6 +146,7 @@ class AuthController extends Controller
             'username_or_nip' => 'unique:users',
             // 'username' => 'unique:users',
             'role' => 'required',
+            'no_telp' => 'required',
             // 'email' => 'required|email|unique:users,email',
             'password' => 'required|min:4',
             'status' => 'required',
@@ -167,6 +168,7 @@ class AuthController extends Controller
             $userData = [
                 'nama' => $request->nama,
                 'username_or_nip' => $request->username_or_nip,
+                'no_telp' => $request->no_telp,
                 // 'username' => $request->username,
                 'role' => $request->role,
                 'password' => $registrationData['password'],
