@@ -272,10 +272,11 @@ class AuthController extends Controller
         ], 200);
     }
     
-    public function findLabPLP($id)
+    public function findLabPLP($idLab)
     {
-        $lab = Lab::find($id);
-        $user = User::where('nama', $lab->plp)->latest()->get();
+        $lab = Lab::find($idLab);
+        $user = User::where('nama', $lab->plp)->first();
+        $userToken = Fcm::where('id_user', $user->id)->latest()->get();
 
         if (!$user) {
             return response()->json([
@@ -285,6 +286,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'data' => $user,
+            'token' => $userToken,
         ], 200);
     }
 }
