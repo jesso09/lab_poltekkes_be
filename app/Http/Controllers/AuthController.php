@@ -276,18 +276,21 @@ class AuthController extends Controller
     {
         $lab = Lab::find($idLab);
         $user = User::where('nama', $lab->plp)->first();
-        if ($user) {
-            $userToken = Fcm::where('id_user', $user->id)->latest()->get();
-        }else {
-            $userToken = [];
-        }
-
+        
         if (!$user) {
             return response()->json([
                 'data' => $user,
                 'message' => "User not found",
             ], 400);
         }
+
+        if ($user) {
+            $userToken = Fcm::where('id_user', $user->id)->latest()->get();
+        }else {
+            $userToken = [];
+        }
+
+        
         return response()->json([
             'data' => $user,
             'token' => $userToken,
