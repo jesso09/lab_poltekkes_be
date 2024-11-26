@@ -33,6 +33,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum']], function ()
     Route::get('user', [AuthController::class, 'indexUser']);
     Route::post('status/{nipOrUsername}', [AuthController::class, 'changeStatusUser']);
     Route::post('newFCM', [AuthController::class, 'makeFCM']);
+    Route::post('findLabPLP/{idLab}', [AuthController::class, 'findLabPLP']);
     Route::get('fcm/{idUser}', [AuthController::class, 'getUserToken']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('userStatus', [AuthController::class, 'getUserStatus']);

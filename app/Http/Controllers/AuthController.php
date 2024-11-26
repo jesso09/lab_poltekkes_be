@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Fcm;
+use App\Models\Lab;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -268,6 +269,22 @@ class AuthController extends Controller
         }
         return response()->json([
             'data' => $userToken,
+        ], 200);
+    }
+    
+    public function findLabPLP($id)
+    {
+        $lab = Lab::find($id);
+        $user = User::where('nama', $lab->plp)->latest()->get();
+
+        if (!$user) {
+            return response()->json([
+                'data' => $user,
+                'message' => "User not found",
+            ], 400);
+        }
+        return response()->json([
+            'data' => $user,
         ], 200);
     }
 }
